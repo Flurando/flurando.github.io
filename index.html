@@ -105,8 +105,8 @@
       })();
 
       function generateAdjasentHTML(element) {
-      element.parentElement.insertAdjacentHTML("beforeend", element.getAttribute("data-adjasent-html") || "");
-      element.parentElement.scrollIntoView({ behavior: 'smooth' });
+	  element.parentElement.insertAdjacentHTML("beforeend", element.getAttribute("data-adjasent-html") || "");
+	  element.parentElement.scrollIntoView({ behavior: 'smooth' });
       }
       
       // make the effect of text change when cursor is on the text element
