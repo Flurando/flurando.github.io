@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>R.W.Flurando</title>
+    <meta charset="UTF-8">
+    <style type="text/css">
+      body {
+	  text-align: center;
+	  background-color: black;
+	  color: orange;
+      }
+      
+      h1 {color: green;}
+
+      a {
+	  color: orange;
+	  text-decoration: none;
+      }
+
+      a:hover {color: yellow;}
+
+      .nick span:hover {
+	  transition: font-size 0.2s;
+	  font-size: 1.3em;
+      }
+    </style>
+  </head>
+  <body>
+    <div>
+      <h1 id="WHO?"
+	  data-hover-text="WHO AM I?"
+	  data-adjasent-html='<p class="nick">
+			      <span><a href="https://www.unicode.org/cgi-bin/GetUnihanData.pl?codepoint=7E60">繠</a></span><span><a href="https://www.unicode.org/cgi-bin/GetUnihanData.pl?codepoint=4D27">䴧</a></span>
+			      <br>
+			      <span>F</span><span>l</span><span>u</span><span>r</span><span>a</span><span>n</span><span>d</span><span>o</span>
+	  </p>'>
+	Wondering How to Call Me, En?
+      </h1>
+    </div>
+    <div>
+      <h1 id="WHAT?"
+	  data-hover-text="WHAT AM I LIKE?"
+	  data-adjasent-html='<p>
+			      Just go and read<br><a href="https://www.paulgraham.com/hp.html"><i id="Hackers & Painters" data-hover-text="Hackers & Painters">Paul Graham&apos;s awesome book</i></a><br>which <b>literally</b> describes my personality
+			      </p>
+	  <p>for my interests<br>
+	    well, <em><strong>art</strong></em> and <em><strong>foss</strong></em></p>'>Or What a Hell This Random Guy Is Right?</h1>
+    </div>
+    <div>
+      <h1 id="WHERE?"
+	  data-hover-text="WHERE TO FIND ME, ONLINE AND OFFLINE?"
+	  data-adjasent-html='<p>
+			      Currently I am studying in<br>
+			      <i id="location" data-hover-text="Shen Zhen, Guangdong, China">Shen Zhen</i><br>
+			      You can meet me in person<br>
+			      if you happen to be around<br>
+			      <i id="company" data-hover-text="Shen Zhen University">SZU</i>
+	  </p>
+	  <p>
+	    I have a blog living at
+	    <br>
+	    <a href="https://chicnook.homes/">chicnook.homes</a>
+	    <br>
+	    or, if anyone wonders, an old one at
+	    <br>
+	    <a href="https://flurando.github.io/blog/">Github</a>
+	    <br>
+	    which I don&apos;t use anymore
+	  </p>'>I Guess You Are<br>Thinking of A Talk Now</h1>
+    </div>
+    <script>
+      // create an effect of typing text one by one
+      const typeText = (() => {
+	  let isTyping = false; // Flag to manage typing state
+	  
+	  const type = (textElement, text, speed = 50, property = "textContent", callback) => {
+              return new Promise((resolve) => {
+		  if (textElement[property] === text || isTyping) {
+		      resolve();
+		      return;
+		  }
+
+		  isTyping = true; // Set the flag to indicate typing is in progress
+		  
+		  let index = 0;
+		  textElement[property] = ""; // Clear the text initially
+
+		  currentInterval = setInterval(() => {
+		      if (index < text.length) {
+			  textElement[property] += text[index];
+			  index++;
+		      } else {
+			  clearInterval(currentInterval);
+			  isTyping = false; // Reset the flag when done
+			  resolve();
+			  if (callback) {callback();}
+			  return;
+		      }
+		  }, speed); // Adjust the speed of typing here (100ms per character)
+              });
+	  };
+	  
+	  return type;
+      })();
+
+      function generateAdjasentHTML(element) {
+	  element.parentElement.insertAdjacentHTML("beforeend", element.getAttribute("data-adjasent-html") || "");
+      }
+      
+      // make the effect of text change when cursor is on the text element
+      async function replaceTextContent(textElement, speed = 50, property = "textContent", callback) {
+	  textElement.style.cursor = "pointer";// yes, change the cursor to pointer makes it the same with interactive elements
+	  const hoverText = textElement.getAttribute("data-hover-text") || "Sorry, please take your mouse away!";
+	  
+	  textElement.addEventListener("mouseover", async function() {
+	      await typeText(textElement, hoverText, speed, property,
+			     () => {
+				 generateAdjasentHTML(textElement);
+				 if (callback) {callback();}
+			     });
+	  });
+      }
+
+      function replaceInnerHTML(element, defaultContent = "Sorry, please take your <i>mouse</i> away!") {
+	  element.style.cursor = "pointer";// again, change the cursor to pointer makes it the same with interactive elements
+	  const hoverText = element.getAttribute("data-hover-text") || defaultContent; // we reuse "data-hover-text" here, but please be careful that there is no animation here, so html tags would work. // in replaceTextContent, if you add html tags, it would be typed to the screen verbosely.
+	  element.addEventListener("mouseover", function() {
+	      element.innerHTML = hoverText;
+	      generateAdjasentHTML(element);
+	  });
+      }
+
+      replaceTextContent(document.getElementById("WHO?"), 100, "textContent");
+      replaceTextContent(document.getElementById("WHAT?"), 100, "textContent",
+			 () => {
+			     replaceTextContent(document.getElementById("Hackers & Painters"));
+			 });
+      replaceTextContent(document.getElementById("WHERE?"), 100, "textContent",
+			 () => {
+			     replaceTextContent(document.getElementById("company"));
+			     replaceTextContent(document.getElementById("location"));
+			 });
+			 </script>
+  </body>
+</html>
