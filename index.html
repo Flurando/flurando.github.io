@@ -88,6 +88,7 @@
 		  currentInterval = setInterval(() => {
 		      if (index < text.length) {
 			  textElement[property] += text[index];
+			  textElement.scrollIntoView({ behavior: 'smooth' });
 			  index++;
 		      } else {
 			  clearInterval(currentInterval);
@@ -104,7 +105,8 @@
       })();
 
       function generateAdjasentHTML(element) {
-	  element.parentElement.insertAdjacentHTML("beforeend", element.getAttribute("data-adjasent-html") || "");
+      element.parentElement.insertAdjacentHTML("beforeend", element.getAttribute("data-adjasent-html") || "");
+      element.parentElement.scrollIntoView({ behavior: 'smooth' });
       }
       
       // make the effect of text change when cursor is on the text element
